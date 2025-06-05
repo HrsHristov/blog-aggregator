@@ -1,11 +1,31 @@
-import { readConfig, setUser } from "./config";
+import { run } from "node:test";
+import { CommandsRegistry, registerCommand, runCommand } from "./commands";
+import { loginHandler } from "./users";
 
 function main() {
-    setUser("Hristo");
-    const cfg = readConfig();
+    const args = process.argv;
+    if (args.length < 3) {
+        console.error("Invalid Command");
+        process.exit(1);
+    }
 
-    // console.log("Test result:", setUser("Hristo"));
-    console.log("Config:", cfg);
+    const [, , cmdName, ...cmdArgs] = args;
+
+    const commandsRegistry: CommandsRegistry = {};
+    registerCommand(commandsRegistry, cmdName, loginHandler);
+
+    try {
+        runCommand(commandsRegistry, cmdName, ...cmdArgs);
+    } catch (error) {
+        if (error instanceof Error) {
+            console.error(
+                `Error running command "${cmdName}": ${error.message}`
+            );
+        } else {
+            console.error(`Error running command "${cmdName}":`, error);
+        }
+        process.exit(1);
+    }
 }
 
 main();
