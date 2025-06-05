@@ -7,6 +7,6 @@
         "strict": true,
         "moduleResolution": "Node"
     },
-    "include": ["./src/**/*.ts"],
+    "include": ["./src/**/*.ts", "src/config.ts-old"],
     "exclude": ["node_modules"]
 }
