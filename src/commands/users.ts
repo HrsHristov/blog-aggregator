@@ -1,6 +1,5 @@
-import { get } from "http";
-import { setUser } from "./config";
-import { createUser, getUserByName } from "./lib/db/queries/users";
+import { setUser } from "../config";
+import { createUser, getUserByName } from "../lib/db/queries/users";
 
 export const loginHandler = async (cmdName: string, ...args: string[]) => {
     if (args.length === 0) {
@@ -10,8 +9,6 @@ export const loginHandler = async (cmdName: string, ...args: string[]) => {
     }
     const username = args[0];
     const user = await getUserByName(username);
-    // const data = JSON.stringify(user);
-    // console.log(`User data retrieved: ${data}`);
     if (!user) {
         throw new Error(
             `User ${username} does not exist. Please register first.`

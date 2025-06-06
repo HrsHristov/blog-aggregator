@@ -1,6 +1,10 @@
-import { run } from "node:test";
-import { CommandsRegistry, registerCommand, runCommand } from "./commands";
-import { loginHandler, registerHandler } from "./users";
+import {
+    CommandsRegistry,
+    registerCommand,
+    runCommand,
+} from "./commands/commands";
+import { resetHandler } from "./commands/reset";
+import { loginHandler, registerHandler } from "./commands/users";
 
 async function main() {
     const args = process.argv;
@@ -14,6 +18,7 @@ async function main() {
     const commandsRegistry: CommandsRegistry = {};
     registerCommand(commandsRegistry, "login", loginHandler);
     registerCommand(commandsRegistry, "register", registerHandler);
+    registerCommand(commandsRegistry, "reset", resetHandler);
 
     try {
         await runCommand(commandsRegistry, cmdName, ...cmdArgs);
