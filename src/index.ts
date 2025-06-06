@@ -1,8 +1,8 @@
 import { run } from "node:test";
 import { CommandsRegistry, registerCommand, runCommand } from "./commands";
-import { loginHandler } from "./users";
+import { loginHandler, registerHandler } from "./users";
 
-function main() {
+async function main() {
     const args = process.argv;
     if (args.length < 3) {
         console.error("Invalid Command");
@@ -12,10 +12,11 @@ function main() {
     const [, , cmdName, ...cmdArgs] = args;
 
     const commandsRegistry: CommandsRegistry = {};
-    registerCommand(commandsRegistry, cmdName, loginHandler);
+    registerCommand(commandsRegistry, "login", loginHandler);
+    registerCommand(commandsRegistry, "register", registerHandler);
 
     try {
-        runCommand(commandsRegistry, cmdName, ...cmdArgs);
+        await runCommand(commandsRegistry, cmdName, ...cmdArgs);
     } catch (error) {
         if (error instanceof Error) {
             console.error(
@@ -26,6 +27,7 @@ function main() {
         }
         process.exit(1);
     }
+    process.exit(0);
 }
 
 main();
