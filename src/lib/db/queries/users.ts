@@ -15,3 +15,8 @@ export async function getUserByName(name: string) {
 export async function deleteAllUsers() {
     await db.delete(users).execute();
 }
+
+export async function getAllUsers() {
+    const results = await db.select().from(users);
+    return results;
+}

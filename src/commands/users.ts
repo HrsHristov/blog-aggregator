@@ -1,5 +1,9 @@
-import { setUser } from "../config";
-import { createUser, getUserByName } from "../lib/db/queries/users";
+import { readConfig, setUser } from "../config";
+import {
+    createUser,
+    getAllUsers,
+    getUserByName,
+} from "../lib/db/queries/users";
 
 export const loginHandler = async (cmdName: string, ...args: string[]) => {
     if (args.length === 0) {
@@ -31,4 +35,17 @@ export const registerHandler = async (cmdName: string, ...args: string[]) => {
     }
     setUser(user.name);
     console.log(`User ${username} registered successfully.`);
+};
+
+export const getUsersHandler = async (_: string) => {
+    const result = await getAllUsers();
+    const config = readConfig();
+    result.forEach((user) => {
+        if (user.name === config.currentUserName) {
+            console.log(`* ${user.name} (current)`);
+            return;
+        } else {
+            console.log(`* ${user.name}`);
+        }
+    });
 };
