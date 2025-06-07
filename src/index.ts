@@ -1,3 +1,4 @@
+import { aggrHandler } from "./commands/aggregate";
 import {
     CommandsRegistry,
     registerCommand,
@@ -24,6 +25,7 @@ async function main() {
     registerCommand(commandsRegistry, "register", registerHandler);
     registerCommand(commandsRegistry, "reset", resetHandler);
     registerCommand(commandsRegistry, "users", getUsersHandler);
+    registerCommand(commandsRegistry, "agg", aggrHandler);
 
     try {
         await runCommand(commandsRegistry, cmdName, ...cmdArgs);
