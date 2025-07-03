@@ -4,7 +4,7 @@ import {
     registerCommand,
     runCommand,
 } from "./commands/commands";
-import { followHandler } from "./commands/feed-follows";
+import { followHandler, listFeedFollowsHandler } from "./commands/feed-follows";
 import { addFeedHandler, feedsHandler } from "./commands/feeds";
 import { resetHandler } from "./commands/reset";
 import {
@@ -31,6 +31,7 @@ async function main() {
     registerCommand(commandsRegistry, "addfeed", addFeedHandler);
     registerCommand(commandsRegistry, "feeds", feedsHandler);
     registerCommand(commandsRegistry, "follow", followHandler);
+    registerCommand(commandsRegistry, "following", listFeedFollowsHandler);
 
     try {
         await runCommand(commandsRegistry, cmdName, ...cmdArgs);
