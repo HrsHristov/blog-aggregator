@@ -12,14 +12,14 @@ export const loginHandler = async (cmdName: string, ...args: string[]) => {
         );
     }
     const username = args[0];
-    const user = await getUserByName(username);
-    if (!user) {
+    const existingUser = await getUserByName(username);
+    if (!existingUser) {
         throw new Error(
-            `User ${username} does not exist. Please register first.`
+            `User ${existingUser} does not exist. Please register first.`
         );
     }
-    setUser(username);
-    console.log(`User ${username} logged in successfully.`);
+    setUser(existingUser.name);
+    console.log(`User ${existingUser.name} logged in successfully.`);
 };
 
 export const registerHandler = async (cmdName: string, ...args: string[]) => {

@@ -15,3 +15,8 @@ export async function getAllFeeds() {
     const results = await db.select().from(feeds);
     return results;
 }
+
+export async function getFeedbyUrl(url: string) {
+    const [result] = await db.select().from(feeds).where(eq(feeds.url, url));
+    return result;
+}
