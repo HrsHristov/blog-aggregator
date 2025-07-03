@@ -5,17 +5,17 @@ import { Feed, User } from "../lib/db/schema";
 import { createFeedFollow } from "../lib/db/queries/feed-follows";
 import { printFollowedFeed } from "./feed-follows";
 
-export const addFeedHandler = async (cmdName: string, ...args: string[]) => {
+export const addFeedHandler = async (
+    cmdName: string,
+    user: User,
+    ...args: string[]
+) => {
     if (args.length < 2) {
         throw new Error(
             `Insufficient arguments for ${cmdName}. Usage: ${cmdName} <feedName> <feedUrl>`
         );
     }
-    const config = readConfig();
-    const user = await getUserByName(config.currentUserName);
-    if (!user) {
-        throw new Error(`User ${config.currentUserName} not found.`);
-    }
+
     const [feedName, feedUrl] = args;
     const feed = await createFeed(feedName, feedUrl, user.id);
     if (!feed) {

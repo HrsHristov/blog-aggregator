@@ -5,19 +5,17 @@ import {
 } from "../lib/db/queries/feed-follows";
 import { readConfig } from "../config";
 import { getUserByName } from "../lib/db/queries/users";
+import { User } from "../lib/db/schema";
 
-export async function followHandler(cmdName: string, ...args: string[]) {
+export async function followHandler(
+    cmdName: string,
+    user: User,
+    ...args: string[]
+) {
     if (args.length !== 1) {
         throw new Error(
             `Invalid number of arguments for command "${cmdName}". Usage: ${cmdName} <feed_url>`
         );
-    }
-
-    const config = readConfig();
-    const user = await getUserByName(config.currentUserName);
-
-    if (!user) {
-        throw new Error(`User ${config.currentUserName} is not found.`);
     }
 
     const feedUrl = args[0];
@@ -30,14 +28,7 @@ export async function followHandler(cmdName: string, ...args: string[]) {
     printFollowedFeed(createFollow.userName, createFollow.feedName);
 }
 
-export async function listFeedFollowsHandler(_: string) {
-    const config = readConfig();
-    const user = await getUserByName(config.currentUserName);
-
-    if (!user) {
-        throw new Error(`User ${config.currentUserName} is not found.`);
-    }
-
+export async function listFeedFollowsHandler(_: string, user: User) {
     const feedFollows = await getFeedFollowsForUser(user.id);
     if (feedFollows.length === 0) {
         console.log("You are not following any feeds.");

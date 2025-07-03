@@ -13,6 +13,8 @@ import {
     getUsersHandler,
 } from "./commands/users";
 
+import { middlewareLoggedIn } from "./middleware";
+
 async function main() {
     const args = process.argv;
     if (args.length < 3) {
@@ -28,10 +30,22 @@ async function main() {
     registerCommand(commandsRegistry, "reset", resetHandler);
     registerCommand(commandsRegistry, "users", getUsersHandler);
     registerCommand(commandsRegistry, "agg", aggrHandler);
-    registerCommand(commandsRegistry, "addfeed", addFeedHandler);
+    registerCommand(
+        commandsRegistry,
+        "addfeed",
+        middlewareLoggedIn(addFeedHandler)
+    );
     registerCommand(commandsRegistry, "feeds", feedsHandler);
-    registerCommand(commandsRegistry, "follow", followHandler);
-    registerCommand(commandsRegistry, "following", listFeedFollowsHandler);
+    registerCommand(
+        commandsRegistry,
+        "follow",
+        middlewareLoggedIn(followHandler)
+    );
+    registerCommand(
+        commandsRegistry,
+        "following",
+        middlewareLoggedIn(listFeedFollowsHandler)
+    );
 
     try {
         await runCommand(commandsRegistry, cmdName, ...cmdArgs);
