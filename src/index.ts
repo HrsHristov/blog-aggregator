@@ -18,6 +18,7 @@ import {
 } from "./commands/users";
 
 import { middlewareLoggedIn } from "./middleware";
+import { browseHandler } from "./commands/browse";
 
 async function main() {
     const args = process.argv;
@@ -54,6 +55,11 @@ async function main() {
         commandsRegistry,
         "unfollow",
         middlewareLoggedIn(unfollowHandler)
+    );
+    registerCommand(
+        commandsRegistry,
+        "browse",
+        middlewareLoggedIn(browseHandler)
     );
 
     try {
