@@ -1,6 +1,7 @@
 import { getFeedbyUrl } from "../lib/db/queries/feeds";
 import {
     createFeedFollow,
+    deleteFeedFollow,
     getFeedFollowsForUser,
 } from "../lib/db/queries/feed-follows";
 import { readConfig } from "../config";
@@ -50,4 +51,29 @@ export function printFollowedFeed(feedUrl: string, userName: string) {
     console.log(`Feed URL:      ${feedUrl}`);
     console.log(`Followed by:   ${userName}`);
     console.log("-----------------------------");
+}
+
+export async function unfollowHandler(
+    cmdName: string,
+    user: User,
+    ...args: string[]
+) {
+    if (args.length !== 1) {
+        throw new Error(
+            `Invalid number of arguments for command "${cmdName}". Usage: ${cmdName} <feed_url>`
+        );
+    }
+
+    const feedUrl = args[0];
+    const feed = await getFeedbyUrl(feedUrl);
+    if (!feed) {
+        throw new Error(`Feed with URL ${feedUrl} does not exist.`);
+    }
+
+    const result = await deleteFeedFollow(user.id, feed.id);
+    if (!result) {
+        throw new Error(`Failed to unfollow feed with URL ${feedUrl}.`);
+    }
+
+    console.log(`Successfully unfollowed feed with URL ${feed.name}.`);
 }
